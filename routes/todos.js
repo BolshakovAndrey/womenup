@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const { getTodos, getTodo, createTodo, deleteTodo } = require('../controllers/todos');
-const { validateTodo  } = require('../middlewares/validators');
+const {
+  getTodos, getTodo, createTodo, deleteTodo,
+} = require('../controllers/todos');
+const { validateTodo } = require('../middlewares/validators');
 
 router.get('/', getTodos);
 router.get('/:_id', getTodo);

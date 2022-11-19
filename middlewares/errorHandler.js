@@ -1,7 +1,6 @@
 const StatusCodes = require('../utils/status-codes');
 const StatusMessages = require('../utils/status-messages');
 
-
 /** Универсальный обработчик стандартных ошибок */
 module.exports = ((err, req, res, next) => {
   const { statusCode = StatusCodes.DEFAULT, message } = err;

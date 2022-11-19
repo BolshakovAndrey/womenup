@@ -24,7 +24,7 @@ module.exports.getTodo = (req, res, next) => {
       if (!todo) {
         throw new NotFoundError();
       }
-         res.send(todo)
+      res.send(todo);
     })
     .catch((err) => {
       if (err.name === ErrorNames.CAST) {

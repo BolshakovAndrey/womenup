@@ -33,7 +33,6 @@ const validateTodo = celebrate({
   }),
 });
 
-
 module.exports = {
   validateSignup,
   validateSignin,

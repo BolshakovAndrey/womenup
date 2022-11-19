@@ -8,10 +8,10 @@ const StatusMessages = require('../utils/status-messages');
 const { JWT_SECRET } = require('../utils/constants');
 
 const {
-    BadRequestError,
-    UnauthorizedError,
-    NotFoundError,
-    ConflictError,
+  BadRequestError,
+  UnauthorizedError,
+  NotFoundError,
+  ConflictError,
 } = require('../errors/index');
 
 /**
@@ -20,20 +20,20 @@ const {
  */
 
 module.exports.getCurrentUser = (req, res, next) => {
-    User.findById(req.user._id)
-        .then((user) => {
-            if (!user) {
-                throw new NotFoundError();
-            }
-            res.send(user);
-        })
-        .catch((err) => {
-            if (err.name === ErrorNames.CAST) {
-                throw new BadRequestError(StatusMessages.INVALID_ID);
-            }
-            next(err);
-        })
-        .catch(next);
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError();
+      }
+      res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === ErrorNames.CAST) {
+        throw new BadRequestError(StatusMessages.INVALID_ID);
+      }
+      next(err);
+    })
+    .catch(next);
 };
 
 /**
@@ -44,25 +44,24 @@ module.exports.getCurrentUser = (req, res, next) => {
  * @param next
  */
 module.exports.createUser = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
-        .then((hash) => User.create({
-            email: req.body.email,
-            password: hash,
-            name: req.body.name,
-        }))
-        .then((user) => res.status(StatusCodes.CREATED).send(user))
-        .catch((err) => {
-            if (err.name === ErrorNames.MONGO && err.code === StatusCodes.MONGO_ERROR) {
-                throw new ConflictError();
-            }
-            if (err.name === ErrorNames.VALIDATION) {
-                throw new BadRequestError(`Переданы некорректные данные при создании пользователя: ${err}`);
-            }
-            next(err);
-        })
-        .catch(next);
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
+      email: req.body.email,
+      password: hash,
+      name: req.body.name,
+    }))
+    .then((user) => res.status(StatusCodes.CREATED).send(user))
+    .catch((err) => {
+      if (err.name === ErrorNames.MONGO && err.code === StatusCodes.MONGO_ERROR) {
+        throw new ConflictError();
+      }
+      if (err.name === ErrorNames.VALIDATION) {
+        throw new BadRequestError(`Переданы некорректные данные при создании пользователя: ${err}`);
+      }
+      next(err);
+    })
+    .catch(next);
 };
-
 
 /**
  * Обновление пользователя
@@ -74,30 +73,29 @@ module.exports.createUser = (req, res, next) => {
  * @constant {string} name -Имя пользователя
  */
 module.exports.updateProfile = (req, res, next) => {
-    const { email, name } = req.body;
+  const { email, name } = req.body;
 
-    User.findByIdAndUpdate(req.user._id, { email, name }, { new: true, runValidators: true })
-        .then((user) => {
-            if (!user) {
-                throw new NotFoundError();
-            }
-            res.send(user);
-        })
-        .catch((err) => {
-            if (err.name === ErrorNames.CAST) {
-                throw new BadRequestError(StatusMessages.INVALID_ID);
-            }
-            if (err.name === ErrorNames.MONGO && err.code === StatusCodes.MONGO_ERROR) {
-                throw new ConflictError();
-            }
-            if (err.name === ErrorNames.VALIDATION) {
-                throw new BadRequestError(`Переданы некорректные данные при обновлении профиля: ${err}`);
-            }
-            next(err);
-        })
-        .catch(next);
+  User.findByIdAndUpdate(req.user._id, { email, name }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError();
+      }
+      res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === ErrorNames.CAST) {
+        throw new BadRequestError(StatusMessages.INVALID_ID);
+      }
+      if (err.name === ErrorNames.MONGO && err.code === StatusCodes.MONGO_ERROR) {
+        throw new ConflictError();
+      }
+      if (err.name === ErrorNames.VALIDATION) {
+        throw new BadRequestError(`Переданы некорректные данные при обновлении профиля: ${err}`);
+      }
+      next(err);
+    })
+    .catch(next);
 };
-
 
 /**
  * Авторизация пользователя
@@ -108,33 +106,33 @@ module.exports.updateProfile = (req, res, next) => {
  * @constant {string} password - Пароль пользователя
  */
 module.exports.login = (req, res, next) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-        throw new BadRequestError();
-    }
-    // Создаем токен
-    return User.findUserByCredentials(email, password)
-        .then((user) => {
-            const token = jwt.sign(
-                { _id: user._id },
-                JWT_SECRET,
-                { expiresIn: '7d' },
-            );
+  if (!email || !password) {
+    throw new BadRequestError();
+  }
+  // Создаем токен
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        JWT_SECRET,
+        { expiresIn: '7d' },
+      );
 
-            res.cookie('jwt', token, {
-                httpOnly: true,
-                sameSite: true,
-            })
-                .send({ token });
-        })
-        .catch((err) => {
-            throw new UnauthorizedError(`${err.message}`);
-        })
-        .catch(next);
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        sameSite: true,
+      })
+        .send({ token });
+    })
+    .catch((err) => {
+      throw new UnauthorizedError(`${err.message}`);
+    })
+    .catch(next);
 };
 
 module.exports.signOut = (req, res, next) => {
-    res.clearCookie('jwt').send({ message: 'Кука удалена' });
-    next();
+  res.clearCookie('jwt').send({ message: 'Кука удалена' });
+  next();
 };

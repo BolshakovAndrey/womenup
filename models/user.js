@@ -46,29 +46,29 @@ function toJSON() {
 
 userSchema.methods.toJSON = toJSON;
 
-
 /**
  * Поиск пользователя по параметрам авторизации
  * @constructor
  * @param {string} email - Почта пользователя
  * @param {string} password - Пароль пользователя
  */
+
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
-      .then((user) => {
-        if (!user) {
-          return Promise.reject(new Error(StatusMessages.INVALID_CREDENTIALS));
-        }
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error(StatusMessages.INVALID_CREDENTIALS));
+      }
 
-        return bcrypt.compare(password, user.password)
-            .then((matched) => {
-              if (!matched) {
-                return Promise.reject(new Error(StatusMessages.INVALID_CREDENTIALS));
-              }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error(StatusMessages.INVALID_CREDENTIALS));
+          }
 
-              return user;
-            });
-      });
+          return user;
+        });
+    });
 };
 
 module.exports = mongoose.model('user', userSchema);
