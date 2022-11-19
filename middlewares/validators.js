@@ -1,13 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const validator = require('validator');
 
-const isUrl = (link) => {
-  const result = validator.isURL(link);
-  if (result) {
-    return link;
-  }
-  throw new Error('Невалидный URL');
-};
 
 const validateSignup = celebrate({
   body: Joi.object().keys({
@@ -38,16 +30,10 @@ const validateTodo = celebrate({
   }),
 });
 
-// const validateTodoId = celebrate({
-//   params: Joi.object().keys({
-//     todoId: Joi.string().hex().length(4),
-//   }),
-// });
 
 module.exports = {
   validateSignup,
   validateSignin,
   validateProfileUpdate,
   validateTodo,
-  // validateTodoId,
 };

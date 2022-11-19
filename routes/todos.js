@@ -1,9 +1,10 @@
 const router = require('express').Router();
-const { getTodos, createTodo, deleteTodo } = require('../controllers/todos');
-const { validateTodo, validateTodoId  } = require('../middlewares/validators');
+const { getTodos, getTodo, createTodo, deleteTodo } = require('../controllers/todos');
+const { validateTodo  } = require('../middlewares/validators');
 
 router.get('/', getTodos);
+router.get('/:_id', getTodo);
 router.post('/', validateTodo, createTodo);
-// router.delete('/:todoId', validateTodoId, deleteTodo);
+router.delete('/:_id', deleteTodo);
 
 module.exports = router;
