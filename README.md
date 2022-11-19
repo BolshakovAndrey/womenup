@@ -1,5 +1,5 @@
 
-# To-do
+# To-do лист
 ### API for the test project fof WomenUp
 
 #### Проект включает:
@@ -14,7 +14,7 @@
 
 `/signup` - возвращает JWT, если в теле запроса переданы правильные почта и пароль
 
-`/users/me`: 
+`/users/me` - возвращает текущего активного пользователя: 
 
 `GET  - возвращает данные пользователя` 
 
@@ -22,11 +22,13 @@
 
 `/todos`: 
 
-`GET  - возвращает todo добавленные пользователем` 
+`GET  - возвращает todo добавленные пользователем`
+
+`GET  - возвращает todo с конретным номером добавленную пользователем`
 
 `POST  - создает  todo` 
 
-`DELETE - удаление todo`
+`DELETE - удаляет todo`
 
 ## Технологии
 
@@ -39,13 +41,4 @@
 ![Helmet](https://img.shields.io/badge/-Helmet-000?&logo=Helmet)
 ![Limitter](https://img.shields.io/badge/-Limitter-000?&logo=Limitter)
 
-
-### Ссылка на API сервера
-
-https://api.
-
-
-## Публичный IP
-
-`000.000.000.00`
 
