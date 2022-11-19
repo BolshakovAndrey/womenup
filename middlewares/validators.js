@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-
+/** Валидация данных для регистрации. */
 const validateSignup = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -9,6 +9,7 @@ const validateSignup = celebrate({
   }),
 });
 
+/** Валидация данных для авторизации. */
 const validateSignin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -16,6 +17,7 @@ const validateSignin = celebrate({
   }),
 });
 
+/** Валидация данных для обновления профиля пользователя */
 const validateProfileUpdate = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -23,6 +25,7 @@ const validateProfileUpdate = celebrate({
   }),
 });
 
+/** Валидация данных задачи */
 const validateTodo = celebrate({
   body: Joi.object().keys({
     title: Joi.string().required(),

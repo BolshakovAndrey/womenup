@@ -4,6 +4,14 @@ const bcrypt = require('bcrypt');
 
 const StatusMessages = require('../utils/status-messages');
 
+/**
+ * Модель пользователя
+ * @constructor
+ * @param {string} email - Почта пользователя
+ * @param {string} password - Пароль пользователя
+ * @param {string} name - Имя пользователя
+ */
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -29,6 +37,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Служебная функиця обработки JSON
 function toJSON() {
   const obj = this.toObject();
   delete obj.password;
@@ -37,6 +46,13 @@ function toJSON() {
 
 userSchema.methods.toJSON = toJSON;
 
+
+/**
+ * Поиск пользователя по параметрам авторизации
+ * @constructor
+ * @param {string} email - Почта пользователя
+ * @param {string} password - Пароль пользователя
+ */
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
       .then((user) => {

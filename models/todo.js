@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+
+/**
+ * Модель задачи
+ * @param {string} title - Название задачи
+ * @param {string} description - Описание задачи
+ * @param {ref} owner - Созадетль задачи
+ * @param {number} todoId - Номер задачи
+ */
 
 const todoSchema = new mongoose.Schema({
   title: {

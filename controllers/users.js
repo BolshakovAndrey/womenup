@@ -14,6 +14,11 @@ const {
     ConflictError,
 } = require('../errors/index');
 
+/**
+ * Получаем текущего пользователя
+ * @param {number} user._id - - Номер пользователя
+ */
+
 module.exports.getCurrentUser = (req, res, next) => {
     User.findById(req.user._id)
         .then((user) => {
@@ -31,6 +36,13 @@ module.exports.getCurrentUser = (req, res, next) => {
         .catch(next);
 };
 
+/**
+ * Создаем пользователя
+ * @constructor
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.createUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then((hash) => User.create({
@@ -51,6 +63,16 @@ module.exports.createUser = (req, res, next) => {
         .catch(next);
 };
 
+
+/**
+ * Обновление пользователя
+ * @constant {string} email - Почта пользователя
+ * @param req
+ * @param res
+ * @param next
+ * @constant {string} email - Почта пользователя
+ * @constant {string} name -Имя пользователя
+ */
 module.exports.updateProfile = (req, res, next) => {
     const { email, name } = req.body;
 
@@ -76,13 +98,22 @@ module.exports.updateProfile = (req, res, next) => {
         .catch(next);
 };
 
+
+/**
+ * Авторизация пользователя
+ * @param req
+ * @param res
+ * @param next
+ * @constant {string} email - Почта пользователя
+ * @constant {string} password - Пароль пользователя
+ */
 module.exports.login = (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
         throw new BadRequestError();
     }
-
+    // Создаем токен
     return User.findUserByCredentials(email, password)
         .then((user) => {
             const token = jwt.sign(
